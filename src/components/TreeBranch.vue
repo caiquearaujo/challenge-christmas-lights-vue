@@ -4,7 +4,8 @@
 			v-for="(node, idx) of nodes"
 			:key="idx"
 			:color="node.color"
-			:direction="node.direction" />
+			:direction="node.direction"
+			:intensity="curve" />
 	</div>
 </template>
 
@@ -29,7 +30,7 @@ export default defineComponent({
 		for (let i = 0; i < this.lights; i++) {
 			this.nodes.push({
 				color: colors[colorFlag],
-				direction: i + (1 % 2) === 0 ? -1 : 1,
+				direction: (i + 1) % 2 === 0 ? -1 : 1,
 			});
 
 			colorFlag++;
@@ -50,6 +51,11 @@ export default defineComponent({
 		lights: {
 			type: Number,
 			default: 7,
+		},
+
+		curve: {
+			type: Number,
+			required: true,
 		},
 	},
 });

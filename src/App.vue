@@ -1,8 +1,5 @@
 <template>
-	<tree-branch />
-	<div style="margin: 24px auto; font-size: 48px">
-		{{ anim.curve }}
-	</div>
+	<tree-branch :curve="anim.curve" />
 </template>
 
 <script lang="ts">
@@ -31,7 +28,7 @@ export default defineComponent({
 	data() {
 		return {
 			anim: {
-				velocity: 0.005,
+				velocity: 0.1,
 				frame: 0,
 				curve: 0,
 				id: null as null | number,
@@ -59,7 +56,7 @@ export default defineComponent({
 		},
 
 		velocity(v: number) {
-			return 0.005 + (55 / 1000) * (v / 100);
+			return (1 / 10) * (v / 100);
 		},
 	},
 });

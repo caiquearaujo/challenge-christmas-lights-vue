@@ -1,5 +1,7 @@
 <template>
-	<div :class="['light', { 'is-off': !on }]">
+	<div
+		:class="['light', { 'is-off': !on }]"
+		:data-direction="direction">
 		<div class="circle" :style="getStyles"></div>
 	</div>
 </template>
@@ -21,6 +23,11 @@ export default defineComponent({
 
 	data() {
 		return {
+			lum: {
+				min: 10,
+				max: 60,
+				dir: this.direction > 0 ? 0 : 1,
+			},
 			currentColor: availableColors[this.color],
 			fixedSize: ((i: number) => (i >= 0 && i <= 48 ? i : 24))(
 				this.size
@@ -41,7 +48,7 @@ export default defineComponent({
 			default: 1,
 		},
 
-		velocity: {
+		direction: {
 			type: Number,
 			default: 1,
 		},
@@ -61,9 +68,12 @@ export default defineComponent({
 	computed: {
 		getStyles() {
 			const styles: Record<string, string> = {};
-			const intensity = this.intensity;
+			const intensity =
+				this.intensity * this.direction + this.lum.dir;
 
-			styles.backgroundColor = `hsl(${this.currentColor.h}, ${this.currentColor.s}%, ${intensity}%)`;
+			styles.backgroundColor = `hsl(${this.currentColor.h}, ${
+				this.currentColor.s
+			}%, ${this.lum.min + this.lum.max * intensity}%)`;
 
 			styles.width = `${this.fixedSize / 2}px`;
 			styles.height = `${this.fixedSize}px`;
