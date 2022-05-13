@@ -7,7 +7,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from '@vue/runtime-core';
 
-const availableColors = {
+export const availableColors = {
 	blue: { h: 178, s: 100, l: 60 },
 	green: { h: 122, s: 100, l: 60 },
 	red: { h: 0, s: 100, l: 60 },
@@ -60,16 +60,17 @@ export default defineComponent({
 
 	computed: {
 		getStyles() {
-			const styles: Record<string, any> = {};
+			const styles: Record<string, string> = {};
+			const intensity = this.intensity;
 
-			styles.backgroundColor = `hsl(${this.currentColor.h}, ${
-				this.currentColor.s
-			}%, ${this.currentColor.l * 1}%)`;
+			styles.backgroundColor = `hsl(${this.currentColor.h}, ${this.currentColor.s}%, ${intensity}%)`;
 
 			styles.width = `${this.fixedSize / 2}px`;
 			styles.height = `${this.fixedSize}px`;
 
-			styles.boxShadow = `0px 0px 10px ${styles.backgroundColor}`;
+			styles.boxShadow = `0px 0px ${20 * intensity}px ${
+				styles.backgroundColor
+			}`;
 
 			return styles;
 		},

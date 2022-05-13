@@ -1,27 +1,23 @@
 <template>
-	<div class="tree">
-		<tree-light color="red" />
-		<tree-light color="green" />
-		<tree-light color="blue" />
-		<tree-light color="yellow" />
-		<tree-light color="red" />
-		<tree-light color="green" />
-		<tree-light color="blue" />
-		<tree-light color="yellow" />
-	</div>
+	<tree-branch />
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
-import TreeLight from '@/components/TreeLight.vue';
+import TreeBranch from '@/components/TreeBranch.vue';
 
 export default defineComponent({
 	name: 'App',
 
-	components: { TreeLight },
+	components: { TreeBranch },
+
+	data() {
+		return {
+			animation: {
+				maxVelocity: 0.01,
+				minVelocity: 0.005,
+			},
+		};
+	},
 });
 </script>
-
-<style lang="scss">
-@import '@/styles/components/tree.scss';
-</style>
