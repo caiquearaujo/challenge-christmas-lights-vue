@@ -1,0 +1,48 @@
+.tree .light {
+	display: flex;
+	margin: 18px;
+	position: relative;
+	width: 100%;
+	max-width: 48px;
+	justify-content: center;
+
+	&.is-off .circle {
+		background-color: rgba(#563260, 0.36) !important;
+		box-shadow: none !important;
+	}
+
+	.circle {
+		position: relative;
+		border-radius: 100%;
+
+		&::before {
+			position: absolute;
+			content: "";
+			width: 50%;
+			height: 40%;
+			top: -25%;
+			left: 50%;
+			transform: translateX(-50%);
+			border-radius: 100% 100% 0 0;
+			display: inline-block;
+			background-color: #443549;
+			z-index: 1;
+		}
+	}
+
+	&::after {
+		position: absolute;
+		content: "";
+		top: -20px;
+		left: 45%;
+		width: 185%;
+		height: 32px;
+		border-bottom: solid #222 3px;
+		border-radius: 50%;
+		z-index: 10;
+	}
+
+	&:last-child::after {
+		content: none;
+	}
+}
