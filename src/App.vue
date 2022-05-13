@@ -1,10 +1,14 @@
 <template>
 	<tree-branch :curve="anim.curve" />
+	<div class="controllers-wrapper">
+		<range-slider-input v-model="anim.velocity" />
+	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
 import TreeBranch from '@/components/TreeBranch.vue';
+import RangeSliderInput from '@/controllers/RangeSliderInput.vue';
 
 const animate = (k = 50) => {
 	// curve math to y axis as y = a sin((x-h)/b) + k
@@ -15,7 +19,7 @@ const animate = (k = 50) => {
 export default defineComponent({
 	name: 'App',
 
-	components: { TreeBranch },
+	components: { TreeBranch, RangeSliderInput },
 
 	created() {
 		this.start();
@@ -28,7 +32,7 @@ export default defineComponent({
 	data() {
 		return {
 			anim: {
-				velocity: 0.1,
+				velocity: 100,
 				frame: 0,
 				curve: 0,
 				id: null as null | number,
@@ -38,7 +42,7 @@ export default defineComponent({
 
 	methods: {
 		step() {
-			this.anim.frame += this.anim.velocity;
+			this.anim.frame += this.velocity(this.anim.velocity);
 			this.anim.curve = animate(this.anim.frame);
 
 			requestAnimationFrame(this.step.bind(this));
@@ -56,7 +60,7 @@ export default defineComponent({
 		},
 
 		velocity(v: number) {
-			return (1 / 10) * (v / 100);
+			return (2 / 10) * (v / 100);
 		},
 	},
 });
