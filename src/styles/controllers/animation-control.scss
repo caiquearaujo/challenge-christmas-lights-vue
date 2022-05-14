@@ -1,0 +1,34 @@
+.animation-control-container {
+	display: flex;
+	justify-content: space-between;
+
+	.control {
+		margin: 6px;
+		padding: 12px;
+		font-size: 1.2rem;
+		font-weight: bold;
+		border-radius: 6px;
+		border: 2px solid #1b7aff;
+		color: #1b7aff;
+		background-color: transparent;
+		width: 50%;
+		cursor: pointer;
+		transition: background-color 0.2s, color 0.2s;
+
+		&:hover {
+			background-color: #1b7aff;
+			color: $white;
+		}
+
+		&:disabled {
+			border: none;
+			color: rgba(#1b7aff, 0.5);
+			cursor: default;
+
+			&:hover {
+				background-color: transparent;
+				color: rgba(#1b7aff, 0.5);
+			}
+		}
+	}
+}

@@ -1,27 +1,18 @@
 .slider {
 	display: flex;
-	padding: 12px;
 
 	.container {
 		width: 100%;
 		position: relative;
 	}
 
-	label {
-		display: table;
-		font-size: 1.3rem;
-		font-weight: bold;
-		margin-bottom: 6px;
-		width: 100%;
-
-		span {
-			text-align: center;
-			color: $black;
-			border-radius: 4px;
-			font-size: 1.2rem;
-			font-weight: normal;
-			float: right;
-		}
+	label span {
+		text-align: center;
+		color: $black;
+		border-radius: 4px;
+		font-size: 1.2rem;
+		font-weight: normal;
+		float: right;
 	}
 
 	input {

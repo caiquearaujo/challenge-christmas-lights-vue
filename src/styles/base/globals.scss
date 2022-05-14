@@ -7,4 +7,21 @@
 	flex-direction: column;
 	max-width: 320px;
 	margin: 48px auto;
+	padding: 12px;
+
+	& div {
+		margin-bottom: 16px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	label {
+		display: table;
+		font-size: 1.3rem;
+		font-weight: bold;
+		margin-bottom: 6px;
+		width: 100%;
+	}
 }

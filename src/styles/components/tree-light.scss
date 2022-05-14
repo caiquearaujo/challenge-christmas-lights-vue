@@ -7,7 +7,9 @@
 	justify-content: center;
 
 	&.is-off .circle {
-		background-color: rgba(#563260, 0.36) !important;
+		transition: background-color 0.2s;
+		background-color: rgba(#563260, 0.12) !important;
+		border-color: transparent !important;
 		box-shadow: none !important;
 	}
 

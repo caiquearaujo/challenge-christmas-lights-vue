@@ -1,7 +1,22 @@
 <template>
 	<div class="wrapper">
-		<tree-branch :curve="anim.curve" />
+		<tree-branch :curve="anim.curve" :off="!anim.playing" />
 		<div class="controllers-wrapper">
+			<label>Animation</label>
+			<div class="animation-control-container">
+				<button
+					class="control"
+					@click="start"
+					:disabled="anim.playing">
+					Start
+				</button>
+				<button
+					class="control"
+					@click="stop"
+					:disabled="!anim.playing">
+					Stop
+				</button>
+			</div>
 			<range-slider-input v-model="anim.velocity" />
 		</div>
 	</div>
@@ -38,6 +53,7 @@ export default defineComponent({
 				frame: 0,
 				curve: 0,
 				id: null as null | number,
+				playing: false,
 			},
 		};
 	},
@@ -47,18 +63,23 @@ export default defineComponent({
 			this.anim.frame += this.velocity(this.anim.velocity);
 			this.anim.curve = animate(this.anim.frame);
 
-			requestAnimationFrame(this.step.bind(this));
-		},
-
-		start() {
 			this.anim.id = requestAnimationFrame(this.step.bind(this));
 		},
 
+		start() {
+			console.log('start', this.anim);
+			if (this.anim.playing) return;
+
+			this.anim.id = requestAnimationFrame(this.step.bind(this));
+			this.anim.playing = true;
+		},
+
 		stop() {
-			if (!this.anim.id) return;
+			if (!this.anim.id || !this.anim.playing) return;
 
 			cancelAnimationFrame(this.anim.id);
 			this.anim.id = null;
+			this.anim.playing = false;
 		},
 
 		velocity(v: number) {
@@ -67,3 +88,7 @@ export default defineComponent({
 	},
 });
 </script>
+
+<style lang="scss">
+@import '@/styles/controllers/animation-control.scss';
+</style>

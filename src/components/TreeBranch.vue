@@ -5,7 +5,8 @@
 			:key="idx"
 			:color="node.color"
 			:direction="node.direction"
-			:intensity="curve" />
+			:intensity="curve"
+			:on="!off" />
 	</div>
 </template>
 
@@ -56,6 +57,11 @@ export default defineComponent({
 		curve: {
 			type: Number,
 			required: true,
+		},
+
+		off: {
+			type: Boolean,
+			default: false,
 		},
 	},
 });
