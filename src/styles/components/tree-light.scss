@@ -65,3 +65,24 @@
 		content: none;
 	}
 }
+
+@media screen and (max-width: 640px) {
+	.tree .light {
+		margin: 8px;
+
+		&::after {
+			width: 140%;
+		}
+	}
+}
+
+@media screen and (max-width: 470px) {
+	.tree .light {
+		margin: 4px;
+		max-width: 36px;
+
+		&::after {
+			width: 130%;
+		}
+	}
+}
