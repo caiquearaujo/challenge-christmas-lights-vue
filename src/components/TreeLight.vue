@@ -2,7 +2,7 @@
 	<div
 		:class="['light', { 'is-off': !on }]"
 		:data-direction="direction">
-		<div class="circle" :style="getStyles"></div>
+		<div :class="`circle ${color}`" :style="getStyles"></div>
 	</div>
 </template>
 
@@ -71,9 +71,9 @@ export default defineComponent({
 			const intensity =
 				this.intensity * this.direction + this.lum.dir;
 
-			styles.backgroundColor = `hsl(${this.currentColor.h}, ${
+			styles.backgroundColor = `hsla(${this.currentColor.h}, ${
 				this.currentColor.s
-			}%, ${this.lum.min + this.lum.max * intensity}%)`;
+			}%, ${this.lum.min + this.lum.max * intensity}%, ${intensity})`;
 
 			styles.width = `${this.fixedSize / 2}px`;
 			styles.height = `${this.fixedSize}px`;

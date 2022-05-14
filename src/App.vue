@@ -1,7 +1,9 @@
 <template>
-	<tree-branch :curve="anim.curve" />
-	<div class="controllers-wrapper">
-		<range-slider-input v-model="anim.velocity" />
+	<div class="wrapper">
+		<tree-branch :curve="anim.curve" />
+		<div class="controllers-wrapper">
+			<range-slider-input v-model="anim.velocity" />
+		</div>
 	</div>
 </template>
 
