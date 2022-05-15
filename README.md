@@ -1,4 +1,4 @@
-# challenge-christmas-lights-vue
+# [still working on it] challenge-christmas-lights-vue
 
 ## Project setup
 ```
