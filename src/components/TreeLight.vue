@@ -1,5 +1,5 @@
 <template>
-	<div :class="['light', { 'is-off': !on }]">
+	<div :id="uuid" :class="['light', { 'is-off': !on }]">
 		<div
 			:class="`circle ${getColor}`"
 			:style="getStyles"
@@ -9,7 +9,8 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from '@vue/runtime-core';
+import { defineComponent, ref } from '@vue/runtime-core';
+import { v4 as uuidv4 } from 'uuid';
 import store, { availableColors, TLightColor } from '@/store';
 
 import LightController from '@/controllers/LightController.vue';
@@ -21,9 +22,18 @@ export default defineComponent({
 		LightController,
 	},
 
+	setup() {
+		const controller = ref<HTMLDivElement | null>(null);
+
+		return {
+			controller,
+		};
+	},
+
 	data() {
 		return {
 			controlling: false,
+			uuid: uuidv4(),
 		};
 	},
 
@@ -89,7 +99,10 @@ export default defineComponent({
 
 	methods: {
 		toggleController() {
-			store.commit.TOGGLE_CONTROLLER_TO_LIGHT(this.index);
+			store.commit.TOGGLE_CONTROLLER_TO_LIGHT({
+				idx: this.index,
+				controller: this.uuid,
+			});
 		},
 	},
 });

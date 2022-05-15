@@ -34,7 +34,7 @@ export type TLuminanceData = {
 export interface IRootState {
 	anim: TAnimationData;
 	lum: TLuminanceData;
-	dropdown: Element | null;
+	dropdown: string | null;
 	lights: Array<TLightNode>;
 }
 
@@ -59,7 +59,7 @@ const { store, rootActionContext, rootGetterContext } =
 		getters: {
 			MAX_LUMINANCE: (state: IRootState): number => state.lum.max,
 			ANIMATION: (state: IRootState): TAnimationData => state.anim,
-			DROPDOWN: (state: IRootState): Element | null => state.dropdown,
+			DROPDOWN: (state: IRootState): string | null => state.dropdown,
 			GET_LIGHTS: (state: IRootState): Array<TLightNode> =>
 				state.lights,
 		},
@@ -75,12 +75,6 @@ const { store, rootActionContext, rootGetterContext } =
 				anim: Partial<TAnimationData>
 			): void => {
 				state.anim = { ...state.anim, ...anim };
-			},
-			UPDATE_DROPDOWN: (
-				state: IRootState,
-				dropdown: Element | null
-			): void => {
-				state.dropdown = dropdown;
 			},
 			PUSH_LIGHT: (
 				state: IRootState,
@@ -110,6 +104,8 @@ const { store, rootActionContext, rootGetterContext } =
 				state.lights.pop();
 			},
 			CLOSE_ALL_LIGHT_CONTROLLERS: (state: IRootState): void => {
+				state.dropdown = null;
+
 				state.lights = state.lights.map(light => ({
 					...light,
 					controlling: { main: false, color: false },
@@ -117,16 +113,18 @@ const { store, rootActionContext, rootGetterContext } =
 			},
 			TOGGLE_CONTROLLER_TO_LIGHT: (
 				state: IRootState,
-				idx: number
+				payload: { idx: number; controller: string }
 			): void => {
-				const cnState = state.lights[idx].controlling.main;
+				const cnState = state.lights[payload.idx].controlling.main;
+				state.dropdown = null;
 
 				state.lights = state.lights.map(light => ({
 					...light,
 					controlling: { main: false, color: false },
 				}));
 
-				state.lights[idx].controlling.main = !cnState;
+				state.lights[payload.idx].controlling.main = !cnState;
+				if (!cnState) state.dropdown = payload.controller;
 			},
 			TOGGLE_COLOR_CONTROLLER_TO_LIGHT: (
 				state: IRootState,

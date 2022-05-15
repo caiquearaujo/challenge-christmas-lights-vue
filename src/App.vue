@@ -46,6 +46,20 @@ export default defineComponent({
 		this.start();
 	},
 
+	mounted() {
+		document.addEventListener('click', (e: any) => {
+			if (this.getDropdown) {
+				if (
+					!document
+						.getElementById(this.getDropdown)
+						?.contains(e.target)
+				) {
+					this.closeAll();
+				}
+			}
+		});
+	},
+
 	unmounted() {
 		this.stop();
 	},
@@ -73,6 +87,10 @@ export default defineComponent({
 			set(v: number) {
 				store.commit.CHANGE_MAX_LUMINANCE(v);
 			},
+		},
+
+		getDropdown(): string | null {
+			return store.getters.DROPDOWN;
 		},
 	},
 
@@ -112,6 +130,10 @@ export default defineComponent({
 
 		calcVelocity(v: number) {
 			return (2 / 10) * (v / 100);
+		},
+
+		closeAll() {
+			store.commit.CLOSE_ALL_LIGHT_CONTROLLERS();
 		},
 	},
 });
