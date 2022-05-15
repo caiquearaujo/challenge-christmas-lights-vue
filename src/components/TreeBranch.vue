@@ -10,11 +10,8 @@
 
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core';
-import store, {
-	availableColors,
-	TLightColor,
-	TLightNode,
-} from '@/store';
+import store, { TLightNode } from '@/store';
+import { createNodes } from '@/tools';
 
 import TreeLight from './TreeLight.vue';
 
@@ -27,19 +24,7 @@ export default defineComponent({
 
 	created() {
 		if (this.getLights.length === this.lights) return;
-		const colors = Object.keys(availableColors) as TLightColor[];
-		let colorFlag = 0;
-
-		for (let i = 0; i < this.lights; i++) {
-			this.pushLight({
-				color: colors[colorFlag],
-				size: 24,
-				direction: (i + 1) % 2 === 0 ? -1 : 1,
-			});
-
-			colorFlag++;
-			if (colorFlag >= colors.length) colorFlag = 0;
-		}
+		createNodes(this.lights, this.pushLight);
 	},
 
 	props: {

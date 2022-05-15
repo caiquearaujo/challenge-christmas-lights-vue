@@ -1,3 +1,5 @@
+import { availableColors, TLightColor, TLightNode } from '@/store';
+
 /**
  * Calculate curve occording to k,
  * where k must be a number which
@@ -21,4 +23,23 @@ export const getCurve = (k = 50): number => {
  */
 export const calcVelocity = (v: number, max = 0.2) => {
 	return max * (v / 100);
+};
+
+export const createNodes = (
+	size: number,
+	push: (node: Partial<TLightNode>) => void
+) => {
+	const colors = Object.keys(availableColors) as TLightColor[];
+	let colorFlag = 0;
+
+	for (let i = 0; i < size; i++) {
+		push({
+			color: colors[colorFlag],
+			size: 24,
+			direction: (i + 1) % 2 === 0 ? -1 : 1,
+		});
+
+		colorFlag++;
+		if (colorFlag >= colors.length) colorFlag = 0;
+	}
 };

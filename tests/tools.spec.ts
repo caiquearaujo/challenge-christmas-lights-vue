@@ -1,4 +1,5 @@
-import { calcVelocity, getCurve } from '@/tools';
+import { TLightNode } from '@/store';
+import { calcVelocity, createNodes, getCurve } from '@/tools';
 
 describe('Tools', () => {
 	const curves = [
@@ -44,4 +45,32 @@ describe('Tools', () => {
 			expect(calcVelocity(input, max)).toBe(output);
 		}
 	);
+
+	it('should create light nodes', () => {
+		const nodes: Array<Partial<TLightNode>> = [];
+		const push = (l: Partial<TLightNode>): void => {
+			nodes.push(l);
+		};
+
+		createNodes(7, push);
+
+		expect(nodes.length).toBe(7);
+
+		const colors = [
+			'blue',
+			'green',
+			'red',
+			'yellow',
+			'blue',
+			'green',
+			'red',
+		];
+
+		const directions = [1, -1, 1, -1, 1, -1, 1];
+
+		nodes.forEach((node, idx) => {
+			expect(node.color).toBe(colors[idx]);
+			expect(node.direction).toBe(directions[idx]);
+		});
+	});
 });
