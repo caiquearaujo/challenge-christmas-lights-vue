@@ -1,8 +1,7 @@
 <template>
 	<div class="wrapper">
-		<tree-branch
-			:curve="getAnimation.curve"
-			:off="!getAnimation.playing" />
+		<h1 class="title">Christmas Light</h1>
+		<tree-branch :off="!getAnimation.playing" />
 		<div class="controllers-wrapper">
 			<label>Animation</label>
 			<div class="animation-control-container">
@@ -10,16 +9,17 @@
 					class="control"
 					@click="start"
 					:disabled="getAnimation.playing">
-					Start
+					On
 				</button>
 				<button
 					class="control"
 					@click="stop"
 					:disabled="!getAnimation.playing">
-					Stop
+					Off
 				</button>
 			</div>
-			<range-slider-input v-model="getAnimation.velocity" />
+			<range-slider-input label="Velocity" v-model="velocity" />
+			<range-slider-input label="Luminance" v-model="luminance" />
 		</div>
 	</div>
 </template>
@@ -54,13 +54,33 @@ export default defineComponent({
 		getAnimation(): TAnimationData {
 			return store.getters.ANIMATION;
 		},
+
+		velocity: {
+			get() {
+				return store.getters.ANIMATION.velocity;
+			},
+
+			set(v: number) {
+				store.commit.UPDATE_ANIMATION({ velocity: v });
+			},
+		},
+
+		luminance: {
+			get() {
+				return store.getters.MAX_LUMINANCE;
+			},
+
+			set(v: number) {
+				store.commit.CHANGE_MAX_LUMINANCE(v);
+			},
+		},
 	},
 
 	methods: {
 		step() {
 			const anim = { ...this.getAnimation };
 
-			anim.frame += this.velocity(anim.velocity);
+			anim.frame += this.calcVelocity(anim.velocity);
 			anim.curve = animate(anim.frame);
 
 			store.commit.UPDATE_ANIMATION({
@@ -90,7 +110,7 @@ export default defineComponent({
 			store.commit.UPDATE_ANIMATION({ id: null, playing: false });
 		},
 
-		velocity(v: number) {
+		calcVelocity(v: number) {
 			return (2 / 10) * (v / 100);
 		},
 	},

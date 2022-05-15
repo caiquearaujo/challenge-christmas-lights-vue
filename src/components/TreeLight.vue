@@ -1,63 +1,36 @@
 <template>
-	<div
-		:class="['light', { 'is-off': !on }]"
-		:data-direction="direction">
+	<div :class="['light', { 'is-off': !on }]">
 		<div
-			:class="`circle ${color}`"
+			:class="`circle ${getColor}`"
 			:style="getStyles"
 			@click="e => toggleController()"></div>
-		<slot v-if="controlling" />
+		<light-controller v-if="isControllerVisible" :index="index" />
 	</div>
 </template>
 
 <script lang="ts">
-import { defineComponent, PropType } from '@vue/runtime-core';
+import { defineComponent } from '@vue/runtime-core';
+import store, { availableColors, TLightColor } from '@/store';
 
-export const availableColors = {
-	blue: { h: 178, s: 100, l: 60 },
-	green: { h: 122, s: 100, l: 60 },
-	red: { h: 0, s: 100, l: 60 },
-	yellow: { h: 49, s: 100, l: 60 },
-};
-
-export type TTreeLightColor = keyof typeof availableColors;
+import LightController from '@/controllers/LightController.vue';
 
 export default defineComponent({
 	name: 'TreeLight',
 
+	components: {
+		LightController,
+	},
+
 	data() {
 		return {
 			controlling: false,
-			lum: {
-				min: 10,
-				max: 60,
-				dir: this.direction > 0 ? 0 : 1,
-			},
 		};
 	},
 
 	props: {
-		color: {
-			type: String as PropType<TTreeLightColor>,
-			default: 'red',
-			validator: (i: TTreeLightColor) =>
-				Object.keys(availableColors).includes(i),
-		},
-
-		intensity: {
+		index: {
 			type: Number,
-			default: 1,
-		},
-
-		direction: {
-			type: Number,
-			default: 1,
-		},
-
-		size: {
-			type: Number,
-			default: 24,
-			validator: (i: number) => i >= 0 && i <= 48,
+			required: true,
 		},
 
 		on: {
@@ -70,16 +43,17 @@ export default defineComponent({
 		getStyles() {
 			const styles: Record<string, string> = {};
 			const intensity =
-				this.intensity * this.direction + this.lum.dir;
+				this.getIntensity * this.getDirection +
+				(this.getDirection > 0 ? 0 : 1);
 
 			styles.backgroundColor = `hsla(${
-				availableColors[this.color].h
-			}, ${availableColors[this.color].s}%, ${
-				this.lum.min + this.lum.max * intensity
-			}%, ${intensity})`;
+				availableColors[this.getColor].h
+			}, ${availableColors[this.getColor].s}%, ${
+				this.getLuminance * intensity
+			}%, ${intensity * (this.getLuminance / 100)})`;
 
-			styles.width = `${this.size / 2}px`;
-			styles.height = `${this.size}px`;
+			styles.width = `${this.getSize / 2}px`;
+			styles.height = `${this.getSize}px`;
 
 			styles.boxShadow = `0px 0px ${20 * intensity}px ${
 				styles.backgroundColor
@@ -87,11 +61,35 @@ export default defineComponent({
 
 			return styles;
 		},
+
+		getIntensity(): number {
+			return store.getters.ANIMATION.curve;
+		},
+
+		getLuminance(): number {
+			return store.getters.MAX_LUMINANCE;
+		},
+
+		getDirection(): number {
+			return store.getters.GET_LIGHTS[this.index].direction;
+		},
+
+		getColor(): TLightColor {
+			return store.getters.GET_LIGHTS[this.index].color;
+		},
+
+		getSize(): number {
+			return store.getters.GET_LIGHTS[this.index].size;
+		},
+
+		isControllerVisible(): boolean {
+			return store.getters.GET_LIGHTS[this.index].controlling.main;
+		},
 	},
 
 	methods: {
 		toggleController() {
-			this.controlling = !this.controlling;
+			store.commit.TOGGLE_CONTROLLER_TO_LIGHT(this.index);
 		},
 	},
 });

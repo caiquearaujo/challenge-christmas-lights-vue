@@ -2,7 +2,7 @@
 	<div class="slider">
 		<div class="container" @mousedown="onMouseDown" ref="container">
 			<label>
-				Velocity
+				{{ label }}
 				<span>{{ modelValue }}</span>
 			</label>
 			<div class="bar">
@@ -78,6 +78,11 @@ export default defineComponent({
 		modelValue: {
 			type: Number,
 			default: 0,
+		},
+
+		label: {
+			type: String,
+			required: true,
 		},
 
 		min: {

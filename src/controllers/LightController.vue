@@ -5,20 +5,13 @@
 			<div
 				:class="`color-picker ${color}`"
 				@click="() => toggleSelector()">
-				<div v-if="colorSelector" class="color-selector">
-					<button class="blue" @click="() => changeColor('blue')">
-						blue
-					</button>
-					<button class="green" @click="() => changeColor('green')">
-						green
-					</button>
-					<button class="red" @click="() => changeColor('red')">
-						red
-					</button>
+				<div v-if="isColorControllerVisible" class="color-selector">
 					<button
-						class="yellow"
-						@click="() => changeColor('yellow')">
-						yellow
+						v-for="(color, idx) of colors"
+						:key="idx"
+						:class="color"
+						@click="() => onUpdateColor(color)">
+						{{ color }}
 					</button>
 				</div>
 			</div>
@@ -54,20 +47,15 @@
 </template>
 
 <script lang="ts">
-import {
-	availableColors,
-	TTreeLightColor,
-} from '@/components/TreeLight.vue';
-import { defineComponent, PropType } from '@vue/runtime-core';
+import store, { availableColors, TLightColor } from '@/store';
+import { defineComponent } from '@vue/runtime-core';
 
 export default defineComponent({
 	name: 'LightController',
 
-	emits: ['updateColor', 'updateSize'],
-
 	data() {
 		return {
-			colorSelector: false,
+			colors: Object.keys(availableColors),
 		};
 	},
 
@@ -76,38 +64,57 @@ export default defineComponent({
 			type: Number,
 			required: true,
 		},
+	},
 
+	computed: {
 		color: {
-			type: String as PropType<TTreeLightColor>,
-			default: 'red',
-			validator: (i: TTreeLightColor) =>
-				Object.keys(availableColors).includes(i),
+			get(): TLightColor {
+				return store.getters.GET_LIGHTS[this.index].color;
+			},
+
+			set(color: TLightColor) {
+				store.commit.UPDATE_LIGHT({
+					idx: this.index,
+					light: { color },
+				});
+			},
 		},
 
 		size: {
-			type: Number,
-			default: 24,
-			validator: (i: number) => i >= 0 && i <= 48,
+			get(): number {
+				return store.getters.GET_LIGHTS[this.index].size;
+			},
+
+			set(size: number) {
+				store.commit.UPDATE_LIGHT({
+					idx: this.index,
+					light: { size },
+				});
+			},
+		},
+
+		isColorControllerVisible(): boolean {
+			return store.getters.GET_LIGHTS[this.index].controlling.color;
 		},
 	},
 
 	methods: {
 		increaseSize() {
 			if (this.size >= 48) return;
-			this.$emit('updateSize', this.index, this.size + 1);
+			this.size = this.size + 1;
 		},
 
 		decreaseSize() {
 			if (this.size <= 0) return;
-			this.$emit('updateSize', this.index, this.size - 1);
-		},
-
-		changeColor(color: TTreeLightColor) {
-			this.$emit('updateColor', this.index, color);
+			this.size = this.size - 1;
 		},
 
 		toggleSelector() {
-			this.colorSelector = !this.colorSelector;
+			store.commit.TOGGLE_COLOR_CONTROLLER_TO_LIGHT(this.index);
+		},
+
+		onUpdateColor(color: string) {
+			this.color = color as TLightColor;
 		},
 	},
 });

@@ -2,6 +2,13 @@
 	margin: 48px auto;
 }
 
+.title {
+	font-size: 4.4rem;
+	font-family: $font-family-cursive;
+	text-align: center;
+	margin-bottom: 48px;
+}
+
 .controllers-wrapper {
 	display: flex;
 	flex-direction: column;

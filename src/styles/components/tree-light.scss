@@ -5,12 +5,11 @@
 	height: 48px;
 	width: 48px;
 	justify-content: center;
-	cursor: pointer;
 
 	&.is-off .circle {
 		transition: background-color 0.2s;
-		background-color: rgba(#563260, 0.12) !important;
-		border-color: transparent !important;
+		background-color: transparent !important;
+		border-color: rgba($white, 0.12) !important;
 		box-shadow: none !important;
 	}
 
@@ -18,6 +17,7 @@
 		position: relative;
 		border-radius: 100%;
 		border: 1px solid;
+		cursor: pointer;
 
 		&.blue {
 			border-color: rgba($blue, 0.5);
@@ -45,7 +45,7 @@
 			transform: translateX(-50%);
 			border-radius: 100% 100% 0 0;
 			display: inline-block;
-			background-color: #443549;
+			background-color: #645959;
 			z-index: 1;
 		}
 	}
@@ -57,9 +57,9 @@
 		left: 45%;
 		width: 185%;
 		height: 32px;
-		border-bottom: solid #222 3px;
+		border-bottom: solid #645959 3px;
 		border-radius: 50%;
-		z-index: 10;
+		z-index: -1;
 	}
 
 	&:last-child::after {

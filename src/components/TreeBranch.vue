@@ -1,46 +1,36 @@
 <template>
 	<div class="tree">
 		<tree-light
-			v-for="(node, idx) of nodes"
+			v-for="(node, idx) of getLights"
+			:index="idx"
 			:key="idx"
-			:color="node.color"
-			:direction="node.direction"
-			:intensity="curve"
-			:size="node.size"
-			:on="!off">
-			<light-controller
-				:index="idx"
-				:color="node.color"
-				:size="node.size"
-				@update-size="onUpdateSize"
-				@update-color="onUpdateColor" />
-		</tree-light>
+			:on="!off" />
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from '@vue/runtime-core';
-import TreeLight, {
+import store, {
 	availableColors,
-	TTreeLightColor,
-} from './TreeLight.vue';
+	TLightColor,
+	TLightNode,
+} from '@/store';
 
-import LightController from '@/controllers/LightController.vue';
+import TreeLight from './TreeLight.vue';
 
 export default defineComponent({
 	name: 'TreeBranch',
 
 	components: {
-		LightController,
 		TreeLight,
 	},
 
 	created() {
-		const colors = Object.keys(availableColors) as TTreeLightColor[];
+		const colors = Object.keys(availableColors) as TLightColor[];
 		let colorFlag = 0;
 
 		for (let i = 0; i < this.lights; i++) {
-			this.nodes.push({
+			this.pushLight({
 				color: colors[colorFlag],
 				size: 24,
 				direction: (i + 1) % 2 === 0 ? -1 : 1,
@@ -51,25 +41,10 @@ export default defineComponent({
 		}
 	},
 
-	data() {
-		return {
-			nodes: [] as Array<{
-				color: TTreeLightColor;
-				size: number;
-				direction: number;
-			}>,
-		};
-	},
-
 	props: {
 		lights: {
 			type: Number,
 			default: 7,
-		},
-
-		curve: {
-			type: Number,
-			required: true,
 		},
 
 		off: {
@@ -78,13 +53,15 @@ export default defineComponent({
 		},
 	},
 
-	methods: {
-		onUpdateSize(i: number, s: number) {
-			this.nodes[i].size = s;
+	computed: {
+		getLights(): readonly TLightNode[] {
+			return store.getters.GET_LIGHTS;
 		},
+	},
 
-		onUpdateColor(i: number, c: TTreeLightColor) {
-			this.nodes[i].color = c;
+	methods: {
+		pushLight(light: Partial<TLightNode>) {
+			store.commit.PUSH_LIGHT(light);
 		},
 	},
 });

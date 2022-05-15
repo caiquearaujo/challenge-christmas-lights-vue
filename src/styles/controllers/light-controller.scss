@@ -1,11 +1,12 @@
 $controller-bg: #f5f9ff;
-$controller-shadow: #ececec;
+$controller-shadow: #222222;
 
 .light-controller {
 	width: 72px;
 	padding: 18px 12px 12px;
 	border-radius: 8px;
 	position: absolute;
+	color: $black;
 	background-color: $controller-bg;
 	bottom: 0;
 	transform: translateY(100%);
