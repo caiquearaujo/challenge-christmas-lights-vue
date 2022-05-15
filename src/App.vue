@@ -1,29 +1,33 @@
 <template>
 	<div class="wrapper">
-		<tree-branch :curve="anim.curve" :off="!anim.playing" />
+		<tree-branch
+			:curve="getAnimation.curve"
+			:off="!getAnimation.playing" />
 		<div class="controllers-wrapper">
 			<label>Animation</label>
 			<div class="animation-control-container">
 				<button
 					class="control"
 					@click="start"
-					:disabled="anim.playing">
+					:disabled="getAnimation.playing">
 					Start
 				</button>
 				<button
 					class="control"
 					@click="stop"
-					:disabled="!anim.playing">
+					:disabled="!getAnimation.playing">
 					Stop
 				</button>
 			</div>
-			<range-slider-input v-model="anim.velocity" />
+			<range-slider-input v-model="getAnimation.velocity" />
 		</div>
 	</div>
 </template>
 
 <script lang="ts">
 import { defineComponent } from 'vue';
+import store, { TAnimationData } from '@/store';
+
 import TreeBranch from '@/components/TreeBranch.vue';
 import RangeSliderInput from '@/controllers/RangeSliderInput.vue';
 
@@ -46,40 +50,44 @@ export default defineComponent({
 		this.stop();
 	},
 
-	data() {
-		return {
-			anim: {
-				velocity: 100,
-				frame: 0,
-				curve: 0,
-				id: null as null | number,
-				playing: false,
-			},
-		};
+	computed: {
+		getAnimation(): TAnimationData {
+			return store.getters.ANIMATION;
+		},
 	},
 
 	methods: {
 		step() {
-			this.anim.frame += this.velocity(this.anim.velocity);
-			this.anim.curve = animate(this.anim.frame);
+			const anim = { ...this.getAnimation };
 
-			this.anim.id = requestAnimationFrame(this.step.bind(this));
+			anim.frame += this.velocity(anim.velocity);
+			anim.curve = animate(anim.frame);
+
+			store.commit.UPDATE_ANIMATION({
+				frame: anim.frame,
+				curve: anim.curve,
+				id: requestAnimationFrame(this.step.bind(this)),
+			});
 		},
 
 		start() {
-			console.log('start', this.anim);
-			if (this.anim.playing) return;
+			const anim = { ...this.getAnimation };
 
-			this.anim.id = requestAnimationFrame(this.step.bind(this));
-			this.anim.playing = true;
+			if (anim.playing) return;
+
+			store.commit.UPDATE_ANIMATION({
+				id: requestAnimationFrame(this.step.bind(this)),
+				playing: true,
+			});
 		},
 
 		stop() {
-			if (!this.anim.id || !this.anim.playing) return;
+			const anim = { ...this.getAnimation };
 
-			cancelAnimationFrame(this.anim.id);
-			this.anim.id = null;
-			this.anim.playing = false;
+			if (!anim.id || !anim.playing) return;
+
+			cancelAnimationFrame(anim.id);
+			store.commit.UPDATE_ANIMATION({ id: null, playing: false });
 		},
 
 		velocity(v: number) {
