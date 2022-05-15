@@ -27,15 +27,10 @@
 <script lang="ts">
 import { defineComponent } from 'vue';
 import store, { TAnimationData } from '@/store';
+import { calcVelocity, getCurve } from './tools';
 
 import TreeBranch from '@/components/TreeBranch.vue';
 import RangeSliderInput from '@/controllers/RangeSliderInput.vue';
-
-const animate = (k = 50) => {
-	// curve math to y axis as y = a sin((x-h)/b) + k
-	// @see https://www.desmos.com/calculator/litkgx7vkd
-	return 0.5 * Math.sin(-k / 1) + 0.5;
-};
 
 export default defineComponent({
 	name: 'App',
@@ -98,8 +93,8 @@ export default defineComponent({
 		step() {
 			const anim = { ...this.getAnimation };
 
-			anim.frame += this.calcVelocity(anim.velocity);
-			anim.curve = animate(anim.frame);
+			anim.frame += calcVelocity(anim.velocity);
+			anim.curve = getCurve(anim.frame);
 
 			store.commit.UPDATE_ANIMATION({
 				frame: anim.frame,
@@ -126,10 +121,6 @@ export default defineComponent({
 
 			cancelAnimationFrame(anim.id);
 			store.commit.UPDATE_ANIMATION({ id: null, playing: false });
-		},
-
-		calcVelocity(v: number) {
-			return (2 / 10) * (v / 100);
 		},
 
 		closeAll() {

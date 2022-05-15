@@ -26,6 +26,7 @@ export default defineComponent({
 	},
 
 	created() {
+		if (this.getLights.length === this.lights) return;
 		const colors = Object.keys(availableColors) as TLightColor[];
 		let colorFlag = 0;
 
