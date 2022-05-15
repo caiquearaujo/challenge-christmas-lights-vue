@@ -6,7 +6,15 @@
 			:color="node.color"
 			:direction="node.direction"
 			:intensity="curve"
-			:on="!off" />
+			:size="node.size"
+			:on="!off">
+			<light-controller
+				:index="idx"
+				:color="node.color"
+				:size="node.size"
+				@update-size="onUpdateSize"
+				@update-color="onUpdateColor" />
+		</tree-light>
 	</div>
 </template>
 
@@ -17,10 +25,13 @@ import TreeLight, {
 	TTreeLightColor,
 } from './TreeLight.vue';
 
+import LightController from '@/controllers/LightController.vue';
+
 export default defineComponent({
 	name: 'TreeBranch',
 
 	components: {
+		LightController,
 		TreeLight,
 	},
 
@@ -31,6 +42,7 @@ export default defineComponent({
 		for (let i = 0; i < this.lights; i++) {
 			this.nodes.push({
 				color: colors[colorFlag],
+				size: 24,
 				direction: (i + 1) % 2 === 0 ? -1 : 1,
 			});
 
@@ -43,6 +55,7 @@ export default defineComponent({
 		return {
 			nodes: [] as Array<{
 				color: TTreeLightColor;
+				size: number;
 				direction: number;
 			}>,
 		};
@@ -64,9 +77,20 @@ export default defineComponent({
 			default: false,
 		},
 	},
+
+	methods: {
+		onUpdateSize(i: number, s: number) {
+			this.nodes[i].size = s;
+		},
+
+		onUpdateColor(i: number, c: TTreeLightColor) {
+			this.nodes[i].color = c;
+		},
+	},
 });
 </script>
 
 <style lang="scss">
 @import '@/styles/components/tree.scss';
+@import '@/styles/controllers/light-controller.scss';
 </style>

@@ -2,9 +2,10 @@
 	display: flex;
 	margin: 18px;
 	position: relative;
-	width: 100%;
-	max-width: 48px;
+	height: 48px;
+	width: 48px;
 	justify-content: center;
+	cursor: pointer;
 
 	&.is-off .circle {
 		transition: background-color 0.2s;
@@ -79,7 +80,8 @@
 @media screen and (max-width: 470px) {
 	.tree .light {
 		margin: 4px;
-		max-width: 36px;
+		height: 36px;
+		width: 36px;
 
 		&::after {
 			width: 130%;

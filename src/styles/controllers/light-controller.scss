@@ -1,0 +1,141 @@
+$controller-bg: #f5f9ff;
+$controller-shadow: #ececec;
+
+.light-controller {
+	width: 72px;
+	padding: 18px 12px 12px;
+	border-radius: 8px;
+	position: absolute;
+	background-color: $controller-bg;
+	bottom: 0;
+	transform: translateY(100%);
+	z-index: 99;
+	text-align: center;
+	user-select: none;
+	box-shadow: 0 16px 25px $controller-shadow;
+
+	&::before {
+		content: "";
+		width: 16px;
+		height: 16px;
+		border-radius: 6px 0 0 0;
+		background-color: $controller-bg;
+		position: absolute;
+		left: 50%;
+		margin-left: -8px;
+		top: -8px;
+		transform: rotate(45deg);
+	}
+
+	label {
+		font-size: 1rem;
+		font-weight: bold;
+		text-transform: uppercase;
+	}
+
+	.color-picker {
+		display: table;
+		margin: 6px auto;
+		width: 36px;
+		height: 36px;
+		background-color: $white;
+		border-radius: 100%;
+		border: 1px solid $controller-bg;
+		position: relative;
+		border: 2px solid $white;
+		cursor: pointer;
+		transition: background-color 0.2s;
+
+		&.blue {
+			background-color: $blue;
+		}
+
+		&.green {
+			background-color: $green;
+		}
+
+		&.yellow {
+			background-color: $yellow;
+		}
+
+		&.red {
+			background-color: $red;
+		}
+	}
+
+	.color-selector {
+		position: absolute;
+		display: flex;
+		left: 50%;
+		bottom: -6px;
+		transform: translate(-50%, 100%);
+		border-radius: 8px;
+		overflow: hidden;
+		background-color: $white;
+		box-shadow: 0 16px 25px $controller-shadow;
+
+		button {
+			padding: 8px;
+			font-size: 1.2rem;
+			font-weight: bold;
+			cursor: pointer;
+			transition: background-color 0.2s;
+			background-color: transparent;
+		}
+
+		.blue {
+			color: $blue;
+
+			&:hover {
+				background-color: rgba($blue, 0.12);
+			}
+		}
+
+		.green {
+			color: $green;
+
+			&:hover {
+				background-color: rgba($green, 0.12);
+			}
+		}
+
+		.yellow {
+			color: $yellow;
+
+			&:hover {
+				background-color: rgba($yellow, 0.12);
+			}
+		}
+
+		.red {
+			color: $red;
+
+			&:hover {
+				background-color: rgba($red, 0.12);
+			}
+		}
+	}
+
+	.size-input {
+		display: table;
+		margin: 6px auto;
+		font-size: 2.4rem;
+		max-width: 100%;
+	}
+
+	.size-buttons {
+		display: flex;
+		justify-content: space-between;
+		margin: 6px auto;
+		position: relative;
+
+		.plus,
+		.minus {
+			display: table;
+			width: 18px;
+			height: 18px;
+			position: relative;
+			cursor: pointer;
+		}
+	}
+}

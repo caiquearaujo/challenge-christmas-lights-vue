@@ -2,7 +2,11 @@
 	<div
 		:class="['light', { 'is-off': !on }]"
 		:data-direction="direction">
-		<div :class="`circle ${color}`" :style="getStyles"></div>
+		<div
+			:class="`circle ${color}`"
+			:style="getStyles"
+			@click="e => toggleController()"></div>
+		<slot v-if="controlling" />
 	</div>
 </template>
 
@@ -23,15 +27,12 @@ export default defineComponent({
 
 	data() {
 		return {
+			controlling: false,
 			lum: {
 				min: 10,
 				max: 60,
 				dir: this.direction > 0 ? 0 : 1,
 			},
-			currentColor: availableColors[this.color],
-			fixedSize: ((i: number) => (i >= 0 && i <= 48 ? i : 24))(
-				this.size
-			),
 		};
 	},
 
@@ -71,18 +72,26 @@ export default defineComponent({
 			const intensity =
 				this.intensity * this.direction + this.lum.dir;
 
-			styles.backgroundColor = `hsla(${this.currentColor.h}, ${
-				this.currentColor.s
-			}%, ${this.lum.min + this.lum.max * intensity}%, ${intensity})`;
+			styles.backgroundColor = `hsla(${
+				availableColors[this.color].h
+			}, ${availableColors[this.color].s}%, ${
+				this.lum.min + this.lum.max * intensity
+			}%, ${intensity})`;
 
-			styles.width = `${this.fixedSize / 2}px`;
-			styles.height = `${this.fixedSize}px`;
+			styles.width = `${this.size / 2}px`;
+			styles.height = `${this.size}px`;
 
 			styles.boxShadow = `0px 0px ${20 * intensity}px ${
 				styles.backgroundColor
 			}`;
 
 			return styles;
+		},
+	},
+
+	methods: {
+		toggleController() {
+			this.controlling = !this.controlling;
 		},
 	},
 });
