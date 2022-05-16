@@ -52,9 +52,7 @@ export default defineComponent({
 	computed: {
 		getStyles() {
 			const styles: Record<string, string> = {};
-			const intensity =
-				this.getIntensity * this.getDirection +
-				(this.getDirection > 0 ? 0 : 1);
+			const intensity = this.calculateIntensity;
 
 			styles.backgroundColor = `hsla(${
 				availableColors[this.getColor].h
@@ -70,6 +68,14 @@ export default defineComponent({
 			}`;
 
 			return styles;
+		},
+
+		calculateIntensity(): number {
+			return (
+				store.getters.ANIMATION.curve *
+					store.getters.GET_LIGHTS[this.index].direction +
+				(store.getters.GET_LIGHTS[this.index].direction > 0 ? 0 : 1)
+			);
 		},
 
 		getIntensity(): number {
